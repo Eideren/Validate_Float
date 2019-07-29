@@ -44,5 +44,12 @@ namespace ValidateFloat
 			string asBinary = ToBinary( value );
 			return $"0b_{asBinary[ 0 ].ToString()}_{asBinary.Substring( 1, 8 )}_{asBinary.Substring( 9, 23 )}";
 		}
+
+
+
+		public static bool NaNAndBitsMatch( float left, float right )
+		{
+			return float.IsNaN( left ) && float.IsNaN( right ) && To<float, uint>( left ) == To<float, uint>( right );
+		}
 	}
 }
