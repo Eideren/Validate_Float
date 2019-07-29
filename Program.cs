@@ -1,12 +1,13 @@
 ﻿namespace ValidateFloat
 {
 	using System;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Threading;
 
 	class Program
 	{
-		const int AMOUNT_OF_RANDOM_FLOATS = 512;
+		const int AMOUNT_OF_RANDOM_FLOATS = 1024;
 		
 		static void Main( string[] args )
 		{
@@ -30,7 +31,7 @@
 			{
 				ASK_AGAIN:
 				Console.WriteLine( "0: Print test tables" );
-				Console.WriteLine( $"1: Print {AMOUNT_OF_RANDOM_FLOATS} random valid floats in binary" );
+				Console.WriteLine( $"1: Print {AMOUNT_OF_RANDOM_FLOATS} random unique valid floats in binary" );
 				switch( Console.ReadLine() )
 				{
 					case "0":
@@ -52,6 +53,7 @@
 					{
 						Random rng = new Random();
 						byte[] bytes = new byte[ sizeof(float) ];
+						HashSet<uint> generatedValues = new HashSet<uint>();
 						for( int i = 0; i < AMOUNT_OF_RANDOM_FLOATS; i++ )
 						{
 							rng.NextBytes( bytes );
@@ -83,7 +85,15 @@
 
 								f = Utility.To<uint, float>( Utility.To<float, uint>( f ) & ~mask );
 							}
-							Console.WriteLine( $"( {Utility.FloatToSpecializedFormatting( f )}, new (string, uint, float)[0] )," );
+							
+							// Try again
+							if( generatedValues.Contains( Utility.To<float, uint>( f ) ) )
+								i--;
+							else
+							{
+								generatedValues.Add( Utility.To<float, uint>( f ) );
+								Console.WriteLine( $"( {Utility.FloatToSpecializedFormatting( f )}, new (string, uint, float)[0] )," );
+							}
 						}
 						
 						break;
