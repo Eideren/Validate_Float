@@ -86,7 +86,7 @@
 			else
 			{
 				new Test( Test.Mode.Validate, Console.Error, Console.Out, out bool error );
-				Console.WriteLine( error ? "Error raised" : "Test passed" );
+				Console.WriteLine( error ? "Error raised !" : "Tests passed" );
 			}
 			
 			Console.WriteLine( "Press enter, return or close this window to exit" );
