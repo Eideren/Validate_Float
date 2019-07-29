@@ -45,48 +45,84 @@ namespace ValidateFloat
 				// Certain operations are funneling tests into specific ranges of values
 				// so we aren't just using them as is, that is dVal's purpose in this code
 				
-				int checkIndex = 0;
 				StartValidation( value );
-				Validate( "BIN", value, testIndex );
-				Validate( "+", value + 0.1735f, testIndex );
-				Validate( "-", value - 17f, testIndex );
-				Validate( "*", value * 7.7757f, testIndex );
-				Validate( "/", value / 0.3353f, testIndex );
-				Validate( "%", value % 7.0f, testIndex ); 
-				Validate( nameof(MathF.Abs), MathF.Abs( value ), testIndex );
-				Validate( nameof(MathF.Acos), MathF.Acos( value % 1f ), testIndex );
-				Validate( nameof(MathF.Acosh), MathF.Acosh( 1f + MathF.Abs( value ) ), testIndex );
-				Validate( nameof(MathF.Asin), MathF.Asin( value % 1f ), testIndex );
-				Validate( nameof(MathF.Asinh), MathF.Asinh( value ), testIndex );
-				Validate( nameof(MathF.Atan), MathF.Atan( value ), testIndex );
-				Validate( nameof(MathF.Atan2), MathF.Atan2( value, 0.17f ), testIndex );
-				Validate( nameof(MathF.Atanh), MathF.Atanh( value % 1f ), testIndex );
-				Validate( nameof(MathF.Cbrt), MathF.Cbrt( value ), testIndex );
-				Validate( nameof(MathF.Ceiling), MathF.Ceiling( value ), testIndex );
-				Validate( nameof(MathF.Cos), MathF.Cos( value ), testIndex );
-				Validate( nameof(MathF.Cosh), MathF.Cosh( value % 2f ), testIndex );
-				Validate( nameof(MathF.Exp), MathF.Exp( 1f / value ), testIndex );
-				Validate( nameof(MathF.Floor), MathF.Floor( value ), testIndex );
-				Validate( nameof(MathF.FusedMultiplyAdd), MathF.FusedMultiplyAdd( value, 1.33f, -1.5f ), testIndex );
-				Validate( nameof(MathF.IEEERemainder), MathF.IEEERemainder( value, 25.78f ), testIndex );
-				Validate( nameof(MathF.Log), MathF.Log( MathF.Abs( value ) ), testIndex );
-				Validate( nameof(MathF.Log)+"(x,y)", MathF.Log( MathF.Abs( value ), 4f ), testIndex );
-				Validate( nameof(MathF.Log2), MathF.Log2( MathF.Abs( value ) ), testIndex );
-				Validate( nameof(MathF.Log10), MathF.Log10( MathF.Abs( value ) ), testIndex );
-				Validate( nameof(MathF.Pow), MathF.Pow( MathF.Abs( value ) % 1E+23f, 1.7f ), testIndex );
-				Validate( nameof(MathF.ScaleB), MathF.ScaleB( value % 1E+23f, 2 ), testIndex );
-				Validate( nameof(MathF.Sin), MathF.Sin( value ), testIndex );
-				Validate( nameof(MathF.Sinh), MathF.Sinh( value % 2f ), testIndex );
-				Validate( nameof(MathF.Sqrt), MathF.Sqrt( MathF.Abs( value ) ), testIndex );
-				Validate( nameof(MathF.Tan), MathF.Tan( value ), testIndex );
-				Validate( nameof(MathF.Tanh), MathF.Tanh( value ), testIndex );
-				Validate( nameof(MathF.Max), MathF.Max( value, 0.9f ), testIndex );
-				Validate( nameof(MathF.MaxMagnitude), MathF.MaxMagnitude( value, -0.7f ), testIndex );
-				Validate( nameof(MathF.Min), MathF.Min( value, 307f ), testIndex );
-				Validate( nameof(MathF.MinMagnitude), MathF.MinMagnitude( value, -8.89f ), testIndex );
-				Validate( nameof(MathF.Round), MathF.Round( value ), testIndex );
-				Validate( nameof(MathF.Sign), MathF.Sign( value ), testIndex );
-				Validate( nameof(MathF.Truncate), MathF.Truncate( value ), testIndex );
+				Validate( testIndex, "BIN", value );
+				Validate( testIndex, "+", value + 0.1735f );
+				Validate( testIndex, "-", value - 17f );
+				Validate( testIndex, "*", value * 7.7757f );
+				Validate( testIndex, "/", value / 0.3353f );
+				Validate( testIndex, "%", value % 7.0f ); 
+				// MATHF
+				Validate( testIndex, nameof(MathF.Abs), MathF.Abs( value ) );
+				Validate( testIndex, nameof(MathF.Acos), MathF.Acos( value % 1f ) );
+				Validate( testIndex, nameof(MathF.Acosh), MathF.Acosh( 1f + MathF.Abs( value ) ) );
+				Validate( testIndex, nameof(MathF.Asin), MathF.Asin( value % 1f ) );
+				Validate( testIndex, nameof(MathF.Asinh), MathF.Asinh( value ) );
+				Validate( testIndex, nameof(MathF.Atan), MathF.Atan( value ) );
+				Validate( testIndex, nameof(MathF.Atan2), MathF.Atan2( value, 0.17f ) );
+				Validate( testIndex, nameof(MathF.Atanh), MathF.Atanh( value % 1f ) );
+				Validate( testIndex, nameof(MathF.Cbrt), MathF.Cbrt( value ) );
+				Validate( testIndex, nameof(MathF.Ceiling), MathF.Ceiling( value ) );
+				Validate( testIndex, nameof(MathF.Cos), MathF.Cos( value ) );
+				Validate( testIndex, nameof(MathF.Cosh), MathF.Cosh( value % 2f ) );
+				Validate( testIndex, nameof(MathF.Exp), MathF.Exp( 1f / value ) );
+				Validate( testIndex, nameof(MathF.Floor), MathF.Floor( value ) );
+				Validate( testIndex, nameof(MathF.FusedMultiplyAdd), MathF.FusedMultiplyAdd( value, 1.33f, -1.5f ) );
+				Validate( testIndex, nameof(MathF.IEEERemainder), MathF.IEEERemainder( value, 25.78f ) );
+				Validate( testIndex, nameof(MathF.Log), MathF.Log( MathF.Abs( value ) ) );
+				Validate( testIndex, nameof(MathF.Log)+"(x,y)", MathF.Log( MathF.Abs( value ), 4f ) );
+				Validate( testIndex, nameof(MathF.Log2), MathF.Log2( MathF.Abs( value ) ) );
+				Validate( testIndex, nameof(MathF.Log10), MathF.Log10( MathF.Abs( value ) ) );
+				Validate( testIndex, nameof(MathF.Pow), MathF.Pow( MathF.Abs( value ) % 1E+23f, 1.7f ) );
+				Validate( testIndex, nameof(MathF.ScaleB), MathF.ScaleB( value % 1E+23f, 2 ) );
+				Validate( testIndex, nameof(MathF.Sin), MathF.Sin( value ) );
+				Validate( testIndex, nameof(MathF.Sinh), MathF.Sinh( value % 2f ) );
+				Validate( testIndex, nameof(MathF.Sqrt), MathF.Sqrt( MathF.Abs( value ) ) );
+				Validate( testIndex, nameof(MathF.Tan), MathF.Tan( value ) );
+				Validate( testIndex, nameof(MathF.Tanh), MathF.Tanh( value ) );
+				Validate( testIndex, nameof(MathF.Max), MathF.Max( value, 0.9f ) );
+				Validate( testIndex, nameof(MathF.MaxMagnitude), MathF.MaxMagnitude( value, -0.7f ) );
+				Validate( testIndex, nameof(MathF.Min), MathF.Min( value, 307f ) );
+				Validate( testIndex, nameof(MathF.MinMagnitude), MathF.MinMagnitude( value, -8.89f ) );
+				Validate( testIndex, nameof(MathF.Round), MathF.Round( value ) );
+				Validate( testIndex, nameof(MathF.Sign), MathF.Sign( value ) );
+				Validate( testIndex, nameof(MathF.Truncate), MathF.Truncate( value ) );
+				// MATH
+				double valueAsDouble = value;
+				Validate( testIndex, $"D.{nameof(Math.Abs)}", Math.Abs( valueAsDouble ) );
+				Validate( testIndex, $"D.{nameof(Math.Acos)}", Math.Acos( valueAsDouble % 1d ) );
+				Validate( testIndex, $"D.{nameof(Math.Acosh)}", Math.Acosh( 1d + Math.Abs( valueAsDouble ) ) );
+				Validate( testIndex, $"D.{nameof(Math.Asin)}", Math.Asin( valueAsDouble % 1d ) );
+				Validate( testIndex, $"D.{nameof(Math.Asinh)}", Math.Asinh( valueAsDouble ) );
+				Validate( testIndex, $"D.{nameof(Math.Atan)}", Math.Atan( valueAsDouble ) );
+				Validate( testIndex, $"D.{nameof(Math.Atan2)}", Math.Atan2( valueAsDouble, 0.17d ) );
+				Validate( testIndex, $"D.{nameof(Math.Atanh)}", Math.Atanh( valueAsDouble % 1d ) );
+				Validate( testIndex, $"D.{nameof(Math.Cbrt)}", Math.Cbrt( valueAsDouble ) );
+				Validate( testIndex, $"D.{nameof(Math.Ceiling)}", Math.Ceiling( valueAsDouble ) );
+				Validate( testIndex, $"D.{nameof(Math.Cos)}", Math.Cos( valueAsDouble ) );
+				Validate( testIndex, $"D.{nameof(Math.Cosh)}", Math.Cosh( valueAsDouble % 2d ) );
+				Validate( testIndex, $"D.{nameof(Math.Exp)}", Math.Exp( 1d / valueAsDouble ) );
+				Validate( testIndex, $"D.{nameof(Math.Floor)}", Math.Floor( valueAsDouble ) );
+				Validate( testIndex, $"D.{nameof(Math.FusedMultiplyAdd)}", Math.FusedMultiplyAdd( valueAsDouble, 1.33d, -1.5d ) );
+				Validate( testIndex, $"D.{nameof(Math.IEEERemainder)}", Math.IEEERemainder( valueAsDouble, 25.78d ) );
+				Validate( testIndex, $"D.{nameof(Math.Log)}", Math.Log( Math.Abs( valueAsDouble ) ) );
+				Validate( testIndex, $"D.{nameof(Math.Log)}"+"(x,y)", Math.Log( Math.Abs( valueAsDouble ), 4d ) );
+				Validate( testIndex, $"D.{nameof(Math.Log2)}", Math.Log2( Math.Abs( valueAsDouble ) ) );
+				Validate( testIndex, $"D.{nameof(Math.Log10)}", Math.Log10( Math.Abs( valueAsDouble ) ) );
+				Validate( testIndex, $"D.{nameof(Math.Pow)}", Math.Pow( Math.Abs( valueAsDouble ) % 1E+23d, 1.7d ) );
+				Validate( testIndex, $"D.{nameof(Math.ScaleB)}", Math.ScaleB( valueAsDouble % 1E+23d, 2 ) );
+				Validate( testIndex, $"D.{nameof(Math.Sin)}", Math.Sin( valueAsDouble ) );
+				Validate( testIndex, $"D.{nameof(Math.Sinh)}", Math.Sinh( valueAsDouble % 2d ) );
+				Validate( testIndex, $"D.{nameof(Math.Sqrt)}", Math.Sqrt( Math.Abs( valueAsDouble ) ) );
+				Validate( testIndex, $"D.{nameof(Math.Tan)}", Math.Tan( valueAsDouble ) );
+				Validate( testIndex, $"D.{nameof(Math.Tanh)}", Math.Tanh( valueAsDouble ) );
+				Validate( testIndex, $"D.{nameof(Math.Max)}", Math.Max( valueAsDouble, 0.9d ) );
+				Validate( testIndex, $"D.{nameof(Math.MaxMagnitude)}", Math.MaxMagnitude( valueAsDouble, -0.7d ) );
+				Validate( testIndex, $"D.{nameof(Math.Min)}", Math.Min( valueAsDouble, 307d ) );
+				Validate( testIndex, $"D.{nameof(Math.MinMagnitude)}", Math.MinMagnitude( valueAsDouble, -8.89d ) );
+				Validate( testIndex, $"D.{nameof(Math.Round)}", Math.Round( valueAsDouble ) );
+				Validate( testIndex, $"D.{nameof(Math.Sign)}", Math.Sign( valueAsDouble ) );
+				Validate( testIndex, $"D.{nameof(Math.Truncate)}", Math.Truncate( valueAsDouble ) );
 				EndValidation();
 			}
 		}
@@ -107,8 +143,12 @@ namespace ValidateFloat
 			if( _mode != Mode.Validate )
 				_infoOut?.WriteLine( $"}} )," );
 		}
+
+
+
+		void Validate( int currentTest, string operationName, double result ) => Validate(currentTest, operationName, (float)result);
 		
-		void Validate( string operationName, float result, int currentTest )
+		void Validate( int currentTest, string operationName, float result )
 		{
 			if( _mode == Mode.Validate )
 			{
