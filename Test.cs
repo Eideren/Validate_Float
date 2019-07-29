@@ -105,7 +105,7 @@ namespace ValidateFloat
 					string resultAsBin = FloatToSpecializedFormatting( To<uint, float>( resultI ) );
 					string expectedAsBin = FloatToSpecializedFormatting( To<uint, float>( expected.i ) );
 					string xorAsBin = FloatToSpecializedFormatting( To<uint, float>( resultI ^ expected.i ) );
-					ReportError( $"FAILED {CheckNames[checkIndex]}\n\t{expectedAsBin}({expected.f:G9}) expected\n\t{resultAsBin}({result:G9}) got\n\t{xorAsBin} XOR" );
+					ReportError( $"FAILED {CheckNames[checkIndex]} on test {currentTest}\n\t{expectedAsBin}({expected.f:G9}) expected\n\t{resultAsBin}({result:G9}) got\n\t{xorAsBin} XOR" );
 				}
 				expectedVal = expected.f;
 			}
