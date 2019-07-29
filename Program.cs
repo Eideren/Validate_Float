@@ -1,11 +1,12 @@
 ﻿namespace ValidateFloat
 {
 	using System;
+	using System.IO;
 	using System.Threading;
 
 	class Program
 	{
-		const int AMOUNT_OF_RANDOM_FLOATS = 128;
+		const int AMOUNT_OF_RANDOM_FLOATS = 512;
 		
 		static void Main( string[] args )
 		{
@@ -34,7 +35,16 @@
 				{
 					case "0":
 					{
-						new Test( Test.Mode.PrintTables, Console.Error, Console.Out );
+						using( var writer = new StringWriter() )
+						{
+							new Test( Test.Mode.PrintTables, Console.Error, writer );
+
+							string path = Path.Combine( Environment.CurrentDirectory, "Table.txt" );
+							
+							File.WriteAllText( path, writer.ToString() );
+							Console.WriteLine( $"Written table to {path}" );
+						}
+						
 						break;
 					}
 
