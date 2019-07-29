@@ -10,6 +10,8 @@ namespace ValidateFloat
 		readonly TextWriter _errorOut, _infoOut;
 		bool _containsError;
 
+		static volatile float _dScaler = 0.1379f, _mult = -2.7f, _add = 1.4478f, _div = 1.5f, _sub = 0.1f;
+
 		public Test( Mode modeParam, TextWriter errorOutParam, TextWriter infoOutParam, out bool error )
 		{
 			_mode = modeParam;
@@ -35,17 +37,17 @@ namespace ValidateFloat
 			for( int testIndex = 0; testIndex < TESTS.Length; testIndex++ )
 			{
 				float value = To<uint, float>( TESTS[testIndex].initialValue );
-				float dVal = value * 0.1379f;
+				float dVal = value * _dScaler;
 				
 				// Certain operations are funneling tests into specific ranges of values
 				// so we aren't just using them as is, that is dVal's purpose in this code
 				
 				int checkIndex = 0;
 				Validate( value, checkIndex++, testIndex, out value );
-				Validate( value * -2.7f, checkIndex++, testIndex, out value );
-				Validate( value + 1.4478f, checkIndex++, testIndex, out value );
-				Validate( value / 1.5f, checkIndex++, testIndex, out value );
-				Validate( value - 0.1f, checkIndex++, testIndex, out value );
+				Validate( value * _mult, checkIndex++, testIndex, out value );
+				Validate( value + _add, checkIndex++, testIndex, out value );
+				Validate( value / _div, checkIndex++, testIndex, out value );
+				Validate( value - _sub, checkIndex++, testIndex, out value );
 				Validate( dVal + value % 7.0f, checkIndex++, testIndex, out value ); 
 				Validate( dVal -MathF.Abs( value ), checkIndex++, testIndex, out value );
 				Validate( dVal + MathF.Acos( value % 1f ), checkIndex++, testIndex, out value );
