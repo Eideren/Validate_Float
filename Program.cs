@@ -5,7 +5,7 @@
 
 	class Program
 	{
-		const int AMOUNT_OF_RANDOM_FLOATS = 20;
+		const int AMOUNT_OF_RANDOM_FLOATS = 128;
 		
 		static void Main( string[] args )
 		{
@@ -34,7 +34,7 @@
 				{
 					case "0":
 					{
-						new Test( Test.Mode.PrintTables, Console.Error, Console.Out, out _ );
+						new Test( Test.Mode.PrintTables, Console.Error, Console.Out );
 						break;
 					}
 
@@ -73,7 +73,7 @@
 
 								f = Utility.To<uint, float>( Utility.To<float, uint>( f ) & ~mask );
 							}
-							Console.WriteLine( $"( {Utility.FloatToSpecializedFormatting( f )}, new (uint, float)[0] )," );
+							Console.WriteLine( $"( {Utility.FloatToSpecializedFormatting( f )}, new (string, uint, float)[0] )," );
 						}
 						
 						break;
@@ -85,8 +85,11 @@
 			}
 			else
 			{
-				new Test( Test.Mode.Validate, Console.Error, Console.Out, out bool error );
-				Console.WriteLine( error ? "Error raised !" : "Tests passed" );
+				var test = new Test( Test.Mode.Validate, Console.Error, Console.Out);
+				if( test.RaisedErrors )
+					Console.WriteLine( $"Failed operations:\n\t{string.Join( "\n\t", test.GetFailedOperations() )}" );
+				else
+					Console.WriteLine( "Tests passed" );
 			}
 			
 			Console.WriteLine( "Press enter, return or close this window to exit" );
