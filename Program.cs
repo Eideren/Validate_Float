@@ -7,7 +7,7 @@
 
 	class Program
 	{
-		const int AMOUNT_OF_RANDOM_FLOATS = 1024;
+		const int AMOUNT_OF_RANDOM_FLOATS = 512;
 		
 		static void Main( string[] args )
 		{
