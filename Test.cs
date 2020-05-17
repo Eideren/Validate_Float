@@ -8,14 +8,16 @@ namespace ValidateFloat
 	
 	public class Test
 	{
+		readonly Table _table;
 		readonly Mode _mode;
 		readonly TextWriter _errorOut, _infoOut;
 		readonly HashSet<string> _failedOperations;
 		
 		public bool RaisedErrors{ get; private set; }
 
-		public Test( Mode modeParam, TextWriter errorOutParam, TextWriter infoOutParam )
+		public Test( Mode modeParam, TextWriter errorOutParam, TextWriter infoOutParam, Table table )
 		{
+			_table = table;
 			_mode = modeParam;
 			_errorOut = errorOutParam;
 			_infoOut = infoOutParam;
@@ -28,19 +30,19 @@ namespace ValidateFloat
 					ReportError( $"{nameof(ToBinary)} and back failed" );
 			}
 			
-			for( int testIndex = 0; testIndex < ResultTable.TABLE.Length; testIndex++ )
+			for( int testIndex = 0; testIndex < _table.Data.Length; testIndex++ )
 			{
-				for( int testResult = 0; testResult < ResultTable.TABLE[testIndex].results.Length; testResult++ )
+				for( int testResult = 0; testResult < (_table.Data[testIndex].results?.Length ?? 0); testResult++ )
 				{
-					var result = ResultTable.TABLE[ testIndex ].results[ testResult ];
+					var result = _table.Data[ testIndex ].results[ testResult ];
 					var asFloat = To<uint, float>( result.i );
 					if( asFloat != result.f && ! NaNAndBitsMatch( asFloat, result.f ) )
 						ReportError( $"FAILED PARSING {ToBinary(result.i)} to value {result.f:G9}, expected {ToBinary(result.f)}" );
 				}
 			}
-			for( int testIndex = 0; testIndex < ResultTable.TABLE.Length; testIndex++ )
+			for( int testIndex = 0; testIndex < _table.Data.Length; testIndex++ )
 			{
-				float value = To<uint, float>( ResultTable.TABLE[testIndex].initialValue );
+				float value = To<uint, float>( _table.Data[testIndex].initialValue );
 				
 				// Certain operations are funneling tests into specific ranges of values
 				// so we aren't just using them as is, that is dVal's purpose in this code
@@ -85,7 +87,7 @@ namespace ValidateFloat
 				Validate( testIndex, nameof(MathF.Min), MathF.Min( value, 307f ) );
 				Validate( testIndex, nameof(MathF.MinMagnitude), MathF.MinMagnitude( value, -8.89f ) );
 				Validate( testIndex, nameof(MathF.Round), MathF.Round( value ) );
-				Validate( testIndex, nameof(MathF.Sign), MathF.Sign( value ) );
+				if(float.IsNaN(value) == false) Validate( testIndex, nameof(MathF.Sign), MathF.Sign( value ) );
 				Validate( testIndex, nameof(MathF.Truncate), MathF.Truncate( value ) );
 				// MATH
 				double valueAsDouble = value;
@@ -121,9 +123,8 @@ namespace ValidateFloat
 				Validate( testIndex, $"D.{nameof(Math.Min)}", Math.Min( valueAsDouble, 307d ) );
 				Validate( testIndex, $"D.{nameof(Math.MinMagnitude)}", Math.MinMagnitude( valueAsDouble, -8.89d ) );
 				Validate( testIndex, $"D.{nameof(Math.Round)}", Math.Round( valueAsDouble ) );
-				Validate( testIndex, $"D.{nameof(Math.Sign)}", Math.Sign( valueAsDouble ) );
+				if(float.IsNaN(value) == false) Validate( testIndex, $"D.{nameof(Math.Sign)}", Math.Sign( valueAsDouble ) );
 				Validate( testIndex, $"D.{nameof(Math.Truncate)}", Math.Truncate( valueAsDouble ) );
-				EndValidation();
 			}
 		}
 
@@ -133,15 +134,9 @@ namespace ValidateFloat
 		{
 			if( _mode != Mode.Validate )
 			{
-				string resultAsBin = FloatToSpecializedFormatting( result );
-				_infoOut?.WriteLine( $"( {resultAsBin}, new (string, uint, float)[]\n{{" );
+				string resultAsBin = ToFloatBinaryFormatting( result );
+				_infoOut?.WriteLine( resultAsBin );
 			}
-		}
-
-		void EndValidation()
-		{
-			if( _mode != Mode.Validate )
-				_infoOut?.WriteLine( $"}} )," );
 		}
 
 
@@ -157,7 +152,7 @@ namespace ValidateFloat
 				(uint i, float f) expected;
 				{
 					(uint i, float f)? expectedOrNull = null;
-					foreach( var expectedResult in ResultTable.TABLE[ currentTest ].results )
+					foreach( var expectedResult in _table.Data[ currentTest ].results )
 					{
 						if( operationName.Equals( expectedResult.operationName ) )
 							expectedOrNull = ( expectedResult.i, expectedResult.f );
@@ -174,9 +169,9 @@ namespace ValidateFloat
 				
 				if( expected.i != resultI || expected.f != result && ! NaNAndBitsMatch( expected.f, result ) )
 				{
-					string resultAsBin = FloatToSpecializedFormatting( To<uint, float>( resultI ) );
-					string expectedAsBin = FloatToSpecializedFormatting( To<uint, float>( expected.i ) );
-					string xorAsBin = FloatToSpecializedFormatting( To<uint, float>( resultI ^ expected.i ) );
+					string resultAsBin = ToFloatBinaryFormatting( To<uint, float>( resultI ) );
+					string expectedAsBin = ToFloatBinaryFormatting( To<uint, float>( expected.i ) );
+					string xorAsBin = ToFloatBinaryFormatting( To<uint, float>( resultI ^ expected.i ) );
 					ReportError( $"FAILED {operationName} on test {currentTest}\n\t{expectedAsBin}({expected.f:G9}) expected\n\t{resultAsBin}({result:G9}) got\n\t{xorAsBin} XOR" );
 					if( _failedOperations.Contains( operationName ) == false )
 						_failedOperations.Add( operationName );
@@ -184,17 +179,8 @@ namespace ValidateFloat
 			}
 			else
 			{
-				string resultAsBin = FloatToSpecializedFormatting( result );
-				string resultString;
-				if( float.IsPositiveInfinity( result ) )
-					resultString = "float.PositiveInfinity";
-				else if( float.IsNegativeInfinity( result ) )
-					resultString = "float.NegativeInfinity";
-				else if( float.IsNaN( result ) )
-					resultString = $"To<uint, float>({resultAsBin})";
-				else
-					resultString = $"{result:G9}f";
-				_infoOut?.WriteLine( $"\t(\"{operationName}\", {resultAsBin}, {resultString})," );
+				string resultAsBin = ToFloatBinaryFormatting( result );
+				_infoOut?.WriteLine( $"{operationName} {resultAsBin} {result:G9}" );
 			}
 		}
 		
