@@ -20,7 +20,7 @@
 			{
 				table = ResultTable.GetTableFromFile();
 			}
-			catch( FileNotFoundException e )
+			catch( FileNotFoundException )
 			{
 				Console.WriteLine( $"{nameof(FileNotFoundException)} while fetching table, trying to regenerate one ..." );
 				GenerateTable();

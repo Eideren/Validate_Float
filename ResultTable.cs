@@ -5,6 +5,9 @@ using System.IO;
 
 namespace ValidateFloat
 {
+	using System.Globalization;
+
+
 
 	public class Table
 	{
@@ -48,7 +51,7 @@ namespace ValidateFloat
 					}
 					else
 					{
-						fVal = float.Parse( values[ 2 ] );
+						fVal = float.Parse( values[ 2 ], CultureInfo.InvariantCulture );
 					}
 					tempList.Add( ( values[ 0 ], Utility.FromFloatBinaryFormatting<uint>( values[ 1 ] ), fVal ) );
 				}

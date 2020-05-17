@@ -2,6 +2,7 @@ namespace ValidateFloat
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.IO;
 	using System.Linq;
 	using static Utility;
@@ -37,7 +38,7 @@ namespace ValidateFloat
 					var result = _table.Data[ testIndex ].results[ testResult ];
 					var asFloat = To<uint, float>( result.i );
 					if( asFloat != result.f && ! NaNAndBitsMatch( asFloat, result.f ) )
-						ReportError( $"FAILED PARSING {ToBinary(result.i)} to value {result.f:G9}, expected {ToBinary(result.f)}" );
+						ReportError( $"FAILED PARSING {ToBinary(result.i)} to value {result.f.ToString("G9", CultureInfo.InvariantCulture)}, expected {ToBinary(result.f)}" );
 				}
 			}
 			for( int testIndex = 0; testIndex < _table.Data.Length; testIndex++ )
@@ -172,7 +173,7 @@ namespace ValidateFloat
 					string resultAsBin = ToFloatBinaryFormatting( To<uint, float>( resultI ) );
 					string expectedAsBin = ToFloatBinaryFormatting( To<uint, float>( expected.i ) );
 					string xorAsBin = ToFloatBinaryFormatting( To<uint, float>( resultI ^ expected.i ) );
-					ReportError( $"FAILED {operationName} on test {currentTest}\n\t{expectedAsBin}({expected.f:G9}) expected\n\t{resultAsBin}({result:G9}) got\n\t{xorAsBin} XOR" );
+					ReportError( $"FAILED {operationName} on test {currentTest}\n\t{expectedAsBin}({expected.f.ToString("G9", CultureInfo.InvariantCulture)}) expected\n\t{resultAsBin}({result:G9}) got\n\t{xorAsBin} XOR" );
 					if( _failedOperations.Contains( operationName ) == false )
 						_failedOperations.Add( operationName );
 				}
@@ -180,7 +181,7 @@ namespace ValidateFloat
 			else
 			{
 				string resultAsBin = ToFloatBinaryFormatting( result );
-				_infoOut?.WriteLine( $"{operationName} {resultAsBin} {result:G9}" );
+				_infoOut?.WriteLine( $"{operationName} {resultAsBin} {result.ToString("G9", CultureInfo.InvariantCulture)}" );
 			}
 		}
 		
